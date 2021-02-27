@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var NameMapper func(string) string = toSnakeCase
+
 var dbStructTagKey = "db"
 
 type toTraverse struct {
@@ -40,7 +42,7 @@ func getColumnToFieldIndexMap(structType reflect.Type) map[string][]int {
 
 			columnPart := dbTag
 			if !dbTagPresent {
-				columnPart = toSnakeCase(field.Name)
+				columnPart = NameMapper(field.Name)
 			}
 			if !field.Anonymous {
 				column := buildColumn(traversal.ColumnPrefix, columnPart)
